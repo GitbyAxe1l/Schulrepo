@@ -95,10 +95,14 @@ int main() {
             break;
         case '3': while (case3schleife) {
             cout << "--------------Auswahl--------------\n"
-                << "|                                    |\n"
-                << "|           [1] Lautstärke           |\n"
-                << "|           [2] Grafik               |\n"
-                << "|           [3] Exit                 |\n"
+                << "|                 |                 |\n"
+                << "|Film schnipsel 1 | Film schnipsel 2|\n"
+                << "|-----------------------------------|\n"
+                << "|                 |                 |\n"
+                << "|Film schnipsel 3 | Film schnipsel 4|\n"
+                << "|-----------------------------------|\n"
+                << "|   gib 'esc' ein um zum Hauptmenü  |\n"
+                << "|             zu kommen|            |\n"
                 << "-------------------------------------\n";
 
 
