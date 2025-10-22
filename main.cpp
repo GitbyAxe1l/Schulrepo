@@ -93,23 +93,26 @@ int main() {
             }
 
             break;
-        case '3': while (case3schleife) {
-            cout << "--------------Auswahl--------------\n"
-                << "|                 |                 |\n"
-                << "|Film schnipsel 1 | Film schnipsel 2|\n"
-                << "|-----------------------------------|\n"
-                << "|                 |                 |\n"
-                << "|Film schnipsel 3 | Film schnipsel 4|\n"
-                << "|-----------------------------------|\n"
-                << "|   gib 'esc' ein um zum Hauptmenü  |\n"
-                << "|             zu kommen|            |\n"
-                << "-------------------------------------\n";
+        case '3':
+            while (case3schleife) {
+                cout << "--------------Auswahl--------------\n"
+                    << "|                 |                 |\n"
+                    << "|Film schnipsel 1 | Film schnipsel 2|\n"
+                    << "|-----------------------------------|\n"
+                    << "|                 |                 |\n"
+                    << "|Film schnipsel 3 | Film schnipsel 4|\n"
+                    << "|-----------------------------------|\n"
+                    << "|   gib 'esc' ein um zum Hauptmenü  |\n"
+                    << "|             zu kommen|            |\n"
+                    << "-------------------------------------\n";
 
+                cin >> menueingaben;
+                if (menueingaben == "esc") {
+                    case3schleife = false;
 
-            if (menueingaben == "esc") {
-                break;
+                }
             }
-        }
+            break;
         case '4': cout << "Cd wird ausgegeben";
             break;
 
