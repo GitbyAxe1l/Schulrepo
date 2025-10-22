@@ -22,7 +22,11 @@ int main() {
          << "| Nummer eingeben zum auswählen |\n"
          << "---------------------------------\n";
 
-
+    /*
+     *-----------------------------------------------------------------------------
+     *                        Speicher für den ganzen Code
+     *-----------------------------------------------------------------------------
+    */
     char eingabe;
     cin >> eingabe;
 
@@ -33,6 +37,7 @@ int main() {
     bool case3schleife = true;
     bool pausiert = false;
     string menueingaben;
+    //-----------------------------------------------------------------------------
 
     switch (eingabe) {
         case '1':
