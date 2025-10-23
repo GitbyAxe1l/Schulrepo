@@ -4,5 +4,5 @@ project(untitled1)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(untitled1 main.cpp
-        schulprojekte/dvdswc
+        cmake-build-debug/dvdswc
 )
