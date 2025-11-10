@@ -3,16 +3,22 @@ using namespace std;
 
 int main(){
 
-    cout << "Bitte gib eine zahl ein um dann alle \nungeradenen werte in dieser zahl wieder zu geben\n";
-    int eingabe;
 
-    cin >> eingabe;
+    float a[5];
+    float ausgabe = 0;
 
-    for (int i = 1; i <= eingabe; i += 2) {
-        eingabe + i;
-        cout << i << ", ";
+    do {
 
-    //test ob das mit github funktioniert
+        for (int i = 0; i < 4; i++) {
 
-    }
+            cout << "\nGib bitte die" << i + 1 << "Note an\n";
+            cin >> a[i]; // eingabe
+
+        }
+
+        for (int i = 0; i < 4; i++) {
+            cout << "Array:" << "[" << i<< "]" << "["<< a[i] <<"]" << "\n";
+        }
+
+    } while (1);
 }
