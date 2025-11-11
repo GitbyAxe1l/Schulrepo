@@ -17,7 +17,7 @@ int main() {
     float test[3]={6,6,6};
 
     do {
-        cin >> eingabe;
+        cin >> eingabe; //
 
 
 
