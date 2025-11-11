@@ -1,3 +1,10 @@
+/*
+Leon Roloff
+Noten Berechnung Programm mit: 
+- 100 Noten speicher 
+- falsch Eingaben Sicherung
+- Noten Wiedergabe
+*/
 #include <iostream>
 #include <windows.h>
 using namespace std;
