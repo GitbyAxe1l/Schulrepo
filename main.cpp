@@ -22,7 +22,7 @@ int main() {
         cout << "\n-== Notenprogramm ==-\n"
              << "[1] Noten eingeben\n"
              << "[2] Noten anzeigen\n"
-             << "[3] Noten Note korregieren\n"
+             << "[3] Noten korregieren\n"
              << "[0] Programm beenden\n"
              << "-> ";
 
