@@ -17,6 +17,7 @@ int main() {
 
     float test[3] = {6,6,6};
 
+
     do {
         cout << "\n-== Notenprogramm ==-\n"
              << "[1] Noten eingeben\n"
@@ -44,12 +45,20 @@ int main() {
                 }
                 cout << "Note erfolgreich gespeichert!\n";
                 break;
-            case '2':
+            case '2': {
                 cout << "\n Aktuelle Noten:\n";
+                float durchschnittsumme = 0.0;
+
                 for (int i = 0; i < 3; i++) {
                     cout << "Note " << i +1 << ": " << test[i] << endl;
+                    durchschnittsumme += test[i];
                 }
+                float durchscnitt = durchschnittsumme /3.0;
+                cout << "\nDurchschnitt: " << durchscnitt << endl;
                 break;
+            }
+
+
             case '3':
                 int korrektursumme;
                 cout << "\nWelche note möchtest du korregieren? (1-3)";
