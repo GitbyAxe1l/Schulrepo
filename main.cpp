@@ -1,6 +1,7 @@
 /*
  * Leon Roloff
- *
+ * Noten programm mit 3 Noten
+ * Flexibles austauschen möglich
  */
 
 #include  <iostream>
