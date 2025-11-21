@@ -5,92 +5,107 @@
  */
 
 #include  <iostream>
+#include <vector>
 #include <windows.h>
 #include <cstdlib>
+#include <iomanip>
 using namespace std;
 
 int main() {
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
-
-    char eingabe;
-
-    float test[3] = {6,6,6};
-
-
+    int  eingabe, eingabegroese,zahlenmenge,mengesorten;
+    char entscheidung;
+    vector<int> original;
+    vector<int> sorting_storage_new;
     do {
-        cout << "\n-== Notenprogramm ==-\n"
-             << "[1] Noten eingeben\n"
-             << "[2] Noten anzeigen\n"
-             << "[3] Noten korregieren\n"
-             << "[0] Programm beenden\n"
-             << "-> ";
+        cout << "Zahl generieren = J , Selbst eintippen = N" << endl;
+    cin >> entscheidung;
+    switch (entscheidung) {
+        case 'J': {
+            cout<< "Wie viel Zahlen willst du Sortieren?" << endl;
+            cin >> zahlenmenge;
+            cout<< "Wie groß soll der Bereich sein in dem die Zahlen generiert werden sollen?" << endl;
+            cin >> mengesorten;
 
-            cin >> eingabe;
+            for (int i = 0; i < zahlenmenge; i++) {
+                int randomnumber = rand() % mengesorten;
+                original.push_back(randomnumber);
 
-        switch (eingabe) {
-            case '1':
-                cout << "\nBitte gib 3 Noten ein (1-6):\n";
-                for (int i = 0; i < 3; i++) {
-                    cout << "Note " << i +1 << ": ";
-                    cin >> test[i];
-
-                    if (cin.fail() || test[i] < 1 || test[i] > 6) {
-                        cout << "Ungültige Eingabe! Bitte 1 bis 6.\n";
-                        cin.clear();
-                        cin.ignore(10000, '\n');
-                        i--;
-                        continue;
-                    }
-                }
-                cout << "Note erfolgreich gespeichert!\n";
-                break;
-            case '2': {
-                cout << "\n Aktuelle Noten:\n";
-                float durchschnittsumme = 0.0;
-
-                for (int i = 0; i < 3; i++) {
-                    cout << "Note " << i +1 << ": " << test[i] << endl;
-                    durchschnittsumme += test[i];
-                }
-                float durchscnitt = durchschnittsumme /3.0;
-                cout << "\nDurchschnitt: " << durchscnitt << endl;
-                break;
             }
+            cout << "--------------Deine random generierten Nummern--------------"<<endl;
+            int counter= 0;
+            for (int alles : original) {
+                cout << " | " << alles;
+                counter++;
 
-
-            case '3':
-                int korrektursumme;
-                cout << "\nWelche note möchtest du korregieren? (1-3)";
-                cin >> korrektursumme;
-
-                if (korrektursumme < 1 || korrektursumme > 3) {
-                    cout << "Ungültige Auswahl der Notenstelle!";
-                    break;
+                if (counter % 10 == 0) {
+                    cout << " | " << endl;
                 }
 
-                cout << "Neu note für: " << korrektursumme << ":\n-> ";
-                cin >> test[korrektursumme -1];
-
-                if (cin.fail() || test[korrektursumme -1] < 1 || test[korrektursumme -1] > 6) {
-                    cout << "Ungültige Eingabe! Änderung abgebrochen.\n";
-                    cin.clear();
-                    cin.ignore(10000, '\n');
-
-                } else {
-                    cout << "Note " << korrektursumme << " wurde geändert :)\n";
-                }
-                break;
-            case '0':
-                cout << "\nzum Programm beenden eine beliebige taste drücken:\n";
-                cin.ignore();
-                cin.get();
-                cout << "\nProgramm beendet!\n";
-                return 0;
+            }
+            break;
         }
+        case 'N': {
+            cout<< "Wie viel Zahlen willst du Sortieren?" << endl;
+            cin >> eingabegroese;
+            cout << "Bitte gib " << eingabegroese << " Zahlen ein:" <<endl;
+            int counter= 0;
+            for (int i = 0; i < eingabegroese; i++) {
+                cin >> eingabe;
+                original.push_back(eingabe);
+            }
+            cout << "--------------Deine Nummern--------------"<<endl;
+            for (int alles : original) {
+                cout << " | " << alles;
+                counter++;
+                if (counter % 10 == 0) {
+                    cout << " | " << endl;
+                }
 
-    } while (true);
+            }
+            break;
+        }
+        default:
+            cout << "Falsche Eingabe" << "J(Ja) oder N(Nein) !!" << endl;
+            break;
 
+    }
+
+    /*
+     * Max Vergleicht sich immer wieder mit der nächsten Zahl bis es die Größte ist
+     */
+    int max = original[0];
+    for (int i=0;i<original.size();i++) {
+        if (original[i] > max) max = original[i];
+    }
+    // Zählt einfach nur hoch bis zum Maximum
+    for (int zaehler=0; zaehler <= max; zaehler++) {
+        //Vergleich Zähler und Original Stellen und Packt es auf den Letzten platz
+        for (int i=0;i<original.size();i++) {
+            if (original[i] == zaehler) {
+                sorting_storage_new.push_back(original[i]);
+            }
+        }
+    }
+    cout << endl <<"--------------Alles sortiert!--------------"<< endl;
+    for (int sorted : sorting_storage_new) {
+        cout << " | " << sorted;
+    }
+    cout << " |" <<endl;
+
+    cout << "Minimum: " << sorting_storage_new.front() << endl
+         << "Maximum: " << sorting_storage_new.back() << endl
+         << "Menge an Zahlen: " << sorting_storage_new.size() << endl;
+
+    float durschnitt = 0.0;
+    for (int schnitt : sorting_storage_new) {
+        durschnitt += schnitt;
+    }
+    durschnitt /= sorting_storage_new.size();
+    cout << "Durchschnitt " << durschnitt << endl << endl;
+
+    }while (1);
 
 
 
