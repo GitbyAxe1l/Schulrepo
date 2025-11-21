@@ -7,7 +7,7 @@
 #include  <iostream>
 #include <vector>
 #include <windows.h>
-#include <cstdlib>
+
 #include <iomanip>
 using namespace std;
 
@@ -106,7 +106,4 @@ int main() {
     cout << "Durchschnitt " << durschnitt << endl << endl;
 
     }while (1);
-
-
-
 }
