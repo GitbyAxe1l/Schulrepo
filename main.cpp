@@ -42,13 +42,10 @@ int main() {
     }
 }
 float parallel(int r1,int r2) {
-    float rges;
     //cout << r1 << " " << r2 << endl;
-    rges = 1.0 / ( (1.0 / r1) + (1.0 / r2) );
-    return rges;
+    return 1.0 / ( (1.0 / r1) + (1.0 / r2) );;
 }
 float reihen(int r1,int r2) {
     //cout << r1 << " " << r2 << endl;
     return r1+r2;
 }
-
