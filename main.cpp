@@ -1,54 +1,75 @@
 #include <iostream>
-#include <windows.h>
+#include <math.h>
 using namespace std;
 
-float parallel(int r1,int r2);
-float reihen(int r1,int r2);
+float strecke (float a, float t);
+float zeit(float a, float S);
+float geschwindigkeit(float S, float t);
+
+void werteholen(void);
+void wertereset(void);
+
+struct  {
+
+    char eingabe;
+    float eingabe1;
+    float eingabe2;
+}eingabewerte;
+
 
 int main() {
 
-    SetConsoleOutputCP(65001);
-    SetConsoleCP(65001);
 
 
-    int dummy1;
-    int dummy2;
-    float rges =0;
-    int dummy3;
+    // pow basis exponent  zb (^2),  power  of 2  also 2^5 // pow(t,2)
+    // sqr , squareroot // sqrt()
 
 
-    cout << "Geben sie  bitte die Werte für die Widerstände R1 und R2 ein" << endl;
+    //s = 0.5 * a * t^2
 
-    cin>>dummy1;
-    cin>>dummy2;
+    cout << "Bitte Wähle s, t oder a zum berechnen";
+    cin >> eingabewerte.eingabe;
+    switch (eingabewerte.eingabe) {
+        case 's':
+            werteholen();
+            cout << "Dein Ergebnis ist:" << 0.5 * eingabewerte.eingabe1 * (eingabewerte.eingabe2 * eingabewerte.eingabe2);
+            wertereset();
 
-    cout << "Wähle sie die Schaltungsweise um Rgesamt auszurechnen" << endl
-         << "Paralell [1] , Reihe [2]" << endl;
-
-    cin >> dummy3;
-
-    switch (dummy3) {
-        case 1:
-            rges = parallel(dummy1,dummy2);
-            cout <<  "Dein Gesammter Widerstand ist: " << rges << endl;
             break;
-        case 2:
-            rges = reihen(dummy1,dummy2);
-            cout <<  "Dein Gesammter Widerstand ist: " << rges << endl;
+        case 't':
+            werteholen();
+            cout << "Dein Ergebnis ist:" << sqrt((2 * eingabewerte.eingabe1) / eingabewerte.eingabe2);;
+            wertereset();
+            break;
+        case 'a':
+            werteholen();
+            cout << "Dein Ergebnis ist:" << eingabewerte.eingabe1 / eingabewerte.eingabe2;;
+            wertereset();
             break;
         default:
-            cout<<"du Säckel"<<endl;
             break;
     }
-}
-float parallel(int r1,int r2) {
-    float rges;
-    //cout << r1 << " " << r2 << endl;
-    rges = 1.0 / ( (1.0 / r1) + (1.0 / r2) );
-    return rges;
-}
-float reihen(int r1,int r2) {
-    //cout << r1 << " " << r2 << endl;
-    return r1+r2;
-}
 
+    return 0;
+}
+float strecke (float a, float t) {
+}
+float zeit(float a, float S) {
+}
+float geschwindigkeit(float S, float t) {
+
+
+}
+void werteholen(void) {
+    cout << "Bitte Gib dein ersten wert ein";
+    cin >> eingabewerte.eingabe1;
+    cout << "Bitte gib dein zweiten wert ein";
+    cin >> eingabewerte.eingabe2;
+}
+void wertereset(void) {
+    eingabewerte.eingabe1 = 0;
+    eingabewerte.eingabe2 = 0;
+    cout << "Werte Resetet"
+         << "W1: "<<eingabewerte.eingabe1<<endl
+         << "W2 "<<eingabewerte.eingabe2<<endl;
+}
