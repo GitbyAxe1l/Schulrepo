@@ -16,7 +16,7 @@ struct  {
     float eingabe2;
 }eingabewerte;
 
-
+//
 int main() {
 
 
