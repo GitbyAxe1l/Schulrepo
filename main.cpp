@@ -1,76 +1,16 @@
 #include <iostream>
-#include <math.h>
+#include <windows.h>
 using namespace std;
 
-float strecke (float a, float t);
-float zeit(float a, float S);
-float geschwindigkeit(float S, float t);
 
-void werteholen(void);
-void wertereset(void);
-
-struct  {
-
-    char eingabe;
-    float eingabe1;
-    float eingabe2;
-}eingabewerte,name;
 
 //
 int main() {
+    SetConsoleOutputCP(65001);
+    SetConsoleCP(65001);
 
 
-
-    // pow basis exponent  zb (^2),  power  of 2  also 2^5 // pow(t,2)
-    // sqr , squareroot // sqrt()
-
-
-    //s = 0.5 * a * t^2
-
-    cout << "Bitte Wähle s, t oder a zum berechnen";
-    cin >> eingabewerte.eingabe;
-    switch (eingabewerte.eingabe) {
-        case 's':
-            werteholen();
-            cout << "Dein Ergebnis ist:" << strecke(eingabewerte.eingabe1, eingabewerte.eingabe2);
-            wertereset();
-            break;
-        case 't':
-            werteholen();
-            cout << "Dein Ergebnis ist:" << zeit(eingabewerte.eingabe1, eingabewerte.eingabe2);
-            wertereset();
-            break;
-        case 'a':
-            werteholen();
-            cout << "Dein Ergebnis ist:" << geschwindigkeit(eingabewerte.eingabe1 ,eingabewerte.eingabe2);
-            wertereset();
-            break;
-        default:
-            break;
-    }
 
 
     return 0;
-}
-float strecke (float a, float t) {
-    return 0.5 * a *(t*t);
-}
-float zeit(float a, float S) {
-    return (2*a) / S;
-}
-float geschwindigkeit(float S, float t) {
-    return S / t;
-}
-void werteholen(void) {
-    cout << "Bitte Gib dein ersten wert ein";
-    cin >> eingabewerte.eingabe1;
-    cout << "Bitte gib dein zweiten wert ein";
-    cin >> eingabewerte.eingabe2;
-}
-void wertereset(void) {
-    eingabewerte.eingabe1 = 0;
-    eingabewerte.eingabe2 = 0;
-    cout << "Werte Resetet"
-         << "W1: "<<eingabewerte.eingabe1<<endl
-         << "W2 "<<eingabewerte.eingabe2<<endl;
 }
