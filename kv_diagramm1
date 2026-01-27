@@ -1,0 +1,44 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int beschreiben = 0;
+    bool kv_diagramm[2][4];
+
+    //kurze befüllung
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 4; j++) {
+            //kv_diagramm[i][j] = 1;
+            cout << "Bitte geben sie den status im feld an: " <<i+1 << " " << j+1 << endl;
+            cin >> beschreiben;
+            if (beschreiben > 1 || beschreiben < 0) {
+                j--;
+                cout << "Bitte gib nur die werte 1 oder 0 an" << endl;
+            }
+            kv_diagramm[i][j] = beschreiben;
+        }
+    }
+
+    //kurze Ausgabe als Tabelle
+    cout << "          A    |     !A     "<< endl;
+    cout << "    ___________|_____________"<< endl;
+    for (int i = 0; i < 2; i++) {
+        if (i==1) {
+            cout << "!B  |  ";
+        }else if (i==0) {
+            cout << " B  |  ";
+
+        }
+
+        for (int j = 0; j < 4; j++) {
+            cout << kv_diagramm[i][j] << "  |  ";
+        }
+        cout << endl;
+    }
+
+    cout << "    ________|_______|__________"<< endl;
+    cout << "       C    |   !C  |    C    "<< endl;
+
+
+    return 0;
+}
