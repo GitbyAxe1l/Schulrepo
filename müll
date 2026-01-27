@@ -1,0 +1,56 @@
+#include <iostream>
+#include <windows.h>
+using namespace std;
+
+void cas1(void);
+void cas2(float a, float b);
+float cas3(void);
+float cas4(float a, float b);
+
+
+//
+int main() {
+    SetConsoleOutputCP(65001);
+    SetConsoleCP(65001);
+    int a = 2;
+    int b = 5;
+
+    cas1();
+    cas2(a,b);
+    cout << cas3() << endl;
+    cout << cas4(a,b) << endl;
+
+    return 0;
+}
+
+
+void cas1(void) {
+    cout << "Case 1 wurde mit 0 0 gestartet.";
+    int a = 5;
+    int b = 5;
+
+
+    cout << a+b << endl;
+}
+void cas2(float a, float b) {
+    cout << "Case 2 wurde mit 0 1 gestartet.";
+    cout << a + b << endl;
+
+}
+float cas3(void) {
+    cout << "Case 3 wurde mit 1 0 gestartet.";
+    float a = 0.0;
+    float b = 0.0;
+    cout << endl << "gib einen wert für a an" << endl;
+    cin >> a;
+    cout << "gib einen wert für b an";
+    cin >> b;
+
+    return a - b;
+
+}
+float cas4(float a, float b) {
+    cout << "Case 4 wurde mit 1 1 gestartet.";
+    return a + b;
+
+}

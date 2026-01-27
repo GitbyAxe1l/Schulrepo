@@ -14,7 +14,7 @@ struct  {
     char eingabe;
     float eingabe1;
     float eingabe2;
-}eingabewerte,name;
+}eingabewerte;
 
 //
 int main() {
