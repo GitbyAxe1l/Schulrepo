@@ -1,0 +1,199 @@
+#include <iostream>
+#include <string>
+#include <windows.h>
+using namespace std;
+
+// Prüft ob in einem Feld eine 1 steht
+bool istEins(string kv[4][6], int r, int c) {
+    return kv[r + 2][c + 2] == "1"; // Daten sind ab Zeile 2, Spalte 2
+}
+
+int main() {
+    SetConsoleOutputCP(65001);
+    SetConsoleCP(65001);
+
+    string kv[4][6];
+    int x;
+
+    kv[0][2] = "A";   kv[0][3] = "A";   kv[0][4] = "!A";  kv[0][5] = "!A";
+
+    kv[1][2] = "C";   kv[1][3] = "!C";  kv[1][4] = "!C"; kv[1][5] = "C";
+
+    kv[2][0] = "B";
+    kv[3][0] = "!B";
+
+    // ===== Eingabe =====
+    for (int r = 2; r <= 3; r++) {
+        for (int c = 2; c <= 5; c++) {
+            cout << "Nur 0 oder 1! für das feld" << r-1 << " " << c-1 << endl;
+            cin >> x;
+
+            if (x != 0 && x != 1) {
+                cout << "Nur 0 oder 1!\n";
+                c--;
+                continue;
+            }
+            kv[r][c] = (x == 1) ? "1" : "0";
+        }
+    }
+
+    // ===== Ausgabe einfach =====
+    cout << "\n    | " << kv[0][2] << " | " << kv[0][3] << " | " << kv[0][4] << " | " << kv[0][5] << " |\n";
+    cout << "----+---+---+----+----\n";
+    cout << " " << kv[2][0] << "  | " << kv[2][2] << " | " << kv[2][3] << " | " << kv[2][4] << "  | " << kv[2][5] << "  |\n";
+    cout << " " << kv[3][0] << " | " << kv[3][2] << " | " << kv[3][3] << " | " << kv[3][4] << "  | " << kv[3][5] << "  |\n";
+    cout << "----+---+---+----+----\n";
+    cout << "    | " << kv[1][2] << " | " << kv[1][3] << " | " << kv[1][4] << " | " << kv[1][5] << " |\n";
+
+
+    int Acol[4] = {1, 1, 0, 0};
+    int Ccol[4] = {1, 0, 0, 1};
+
+
+    int Brow[2] = {1, 0};
+
+
+    bool benutzt[2][4];
+    for (int r = 0; r < 2; r++)
+        for (int c = 0; c < 4; c++)
+            benutzt[r][c] = false;
+
+
+    string terme[20];
+    int termCount = 0;
+
+
+    // wenn A in der Gruppe immer gleich bleibt -> A oder !A, sonst weg
+    auto addTerm = [&](int aWert, int bWert, int cWert, bool aFix, bool bFix, bool cFix) {
+        string t = "";
+        if (aFix) t += (aWert == 1 ? "A" : "!A");
+        if (bFix) t += (bWert == 1 ? "B" : "!B");
+        if (cFix) t += (cWert == 1 ? "C" : "!C");
+        if (t == "") t = "1"; // alles egal
+        terme[termCount++] = t;
+    };
+
+    // ========= 1) 8er prüfen =========
+    bool alles1 = true;
+    for (int r = 0; r < 2; r++)
+        for (int c = 0; c < 4; c++)
+            if (!istEins(kv, r, c)) alles1 = false;
+
+    if (alles1) {
+        cout << "\nDNF: y = 1\n";
+        return 0;
+    }
+
+    // ========= 2) 4er Gruppen (Reihen) =========
+    for (int r = 0; r < 2; r++) {
+        bool reihe1 = true;
+        for (int c = 0; c < 4; c++) {
+            if (!istEins(kv, r, c)) reihe1 = false;
+        }
+
+        if (reihe1) {
+            // markiere alle 4
+            for (int c = 0; c < 4; c++) benutzt[r][c] = true;
+
+            // Term: B ist konstant (weil ganze Reihe), A und C wechseln -> weg
+            addTerm(0, Brow[r], 0, false, true, false);
+        }
+    }
+
+    // ========= 3) 4er Gruppen (2x2 Blöcke) =========
+    for (int startC = 0; startC < 4; startC++) {
+        int c2 = (startC + 1) % 4;
+
+        bool block1 =
+            istEins(kv, 0, startC) && istEins(kv, 0, c2) &&
+            istEins(kv, 1, startC) && istEins(kv, 1, c2);
+
+        // nur nehmen, wenn mindestens eine Zelle noch nicht benutzt ist
+        bool bringtWas =
+            (!benutzt[0][startC] || !benutzt[0][c2] || !benutzt[1][startC] || !benutzt[1][c2]);
+
+        if (block1 && bringtWas) {
+            benutzt[0][startC] = benutzt[0][c2] = true;
+            benutzt[1][startC] = benutzt[1][c2] = true;
+
+            // In 2x2: B wechselt (oben/unten), A und C schauen wir ob konstant:
+            bool aFix = (Acol[startC] == Acol[c2]);
+            bool cFix = (Ccol[startC] == Ccol[c2]);
+
+            addTerm(Acol[startC], 0, Ccol[startC], aFix, false, cFix);
+        }
+    }
+
+    // ========= 4) 2er Gruppen (horizontal) =========
+    for (int r = 0; r < 2; r++) {
+        for (int startC = 0; startC < 4; startC++) {
+            int c2 = (startC + 1) % 4;
+
+            bool zwei1 = istEins(kv, r, startC) && istEins(kv, r, c2);
+            bool bringtWas = (!benutzt[r][startC] || !benutzt[r][c2]);
+
+            if (zwei1 && bringtWas) {
+                benutzt[r][startC] = true;
+                benutzt[r][c2] = true;
+
+                // In 2er horizontal: B konstant, A und C evtl konstant
+                bool aFix = (Acol[startC] == Acol[c2]);
+                bool cFix = (Ccol[startC] == Ccol[c2]);
+
+                addTerm(Acol[startC], Brow[r], Ccol[startC], aFix, true, cFix);
+            }
+        }
+    }
+
+    // ========= 5) 2er Gruppen (vertikal) =========
+    for (int c = 0; c < 4; c++) {
+        bool zwei1 = istEins(kv, 0, c) && istEins(kv, 1, c);
+        bool bringtWas = (!benutzt[0][c] || !benutzt[1][c]);
+
+        if (zwei1 && bringtWas) {
+            benutzt[0][c] = true;
+            benutzt[1][c] = true;
+
+            // Vertikal: A und C konstant, B wechselt
+            addTerm(Acol[c], 0, Ccol[c], true, false, true);
+        }
+    }
+
+    // ========= 6) Einzelne 1en =========
+    for (int r = 0; r < 2; r++) {
+        for (int c = 0; c < 4; c++) {
+            if (istEins(kv, r, c) && !benutzt[r][c]) {
+                benutzt[r][c] = true;
+                // Einzelterm: A,B,C alle konstant
+                addTerm(Acol[c], Brow[r], Ccol[c], true, true, true);
+            }
+        }
+    }
+
+    // ===== DNF ausgeben (Duplikate entfernen) =====
+    string unique[20];
+    int uCount = 0;
+
+    for (int i = 0; i < termCount; i++) {
+        bool schon = false;
+        for (int j = 0; j < uCount; j++) {
+            if (unique[j] == terme[i]) schon = true;
+        }
+        if (!schon) unique[uCount++] = terme[i];
+    }
+
+    cout << "\n(einfach / groesste Gruppen zuerst):\n";
+    if (uCount == 0) {
+        cout << "y = 0\n";
+    } else {
+        cout << "y = ";
+        for (int i = 0; i < uCount; i++) {
+            cout << unique[i];
+            if (i < uCount - 1) cout << " + ";
+        }
+        cout << "\n";
+    }
+
+    cout << "\nSchreibweise: !A = NICHT A,  AB = A UND B,  + = ODER\n";
+    return 0;
+}
