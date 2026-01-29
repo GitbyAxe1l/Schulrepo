@@ -11,12 +11,10 @@ int main() {
     string kv[4][6];
     int x;
 
-    // ===== Beschriftung (dein Wunsch) =====
-    // oben A A !A !A
     kv[0][2] = "A";   kv[0][3] = "A";   kv[0][4] = "!A";  kv[0][5] = "!A";
-    // unten C !C !C C
+
     kv[1][2] = "C";   kv[1][3] = "!C";  kv[1][4] = "!C"; kv[1][5] = "C";
-    // links B / !B
+
     kv[2][0] = "B";
     kv[3][0] = "!B";
 
@@ -180,7 +178,7 @@ int main() {
         if (!schon) unique[uCount++] = terme[i];
     }
 
-    cout << "\nDNF (einfach / groesste Gruppen zuerst):\n";
+    cout << "\n(einfach / groesste Gruppen zuerst):\n";
     if (uCount == 0) {
         cout << "y = 0\n";
     } else {
