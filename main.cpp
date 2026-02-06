@@ -2,88 +2,74 @@
 #include <windows.h>
 using namespace std;
 
+struct SD { // Spielerdaten
+    string nn = "User";
+    int lev = 0;
+    int pts = 0;
+
+    void setspielerdaten(int spielerNr);
+    void getspielerdaten(int spielerNr) const;
+};
+
+// Eingabe der Spielerdaten (für EINEN Spieler)
+void SD::setspielerdaten(int spielerNr) {
+    cout << "Bitte geben sie ein Username für Spieler " << spielerNr << endl;
+    cin >> nn;
+
+    cout << "Bitte geben sie das Level für Spieler " << spielerNr << endl;
+    cin >> lev;
+
+    cout << "Bitte geben sie die Punkte für Spieler " << spielerNr << endl;
+    cin >> pts;
+}
+
+// Ausgabe der Spielerdaten (für EINEN Spieler)
+void SD::getspielerdaten(int spielerNr) const {
+    cout << "\nDer Spieler " << spielerNr << " hat folgende Daten:\n";
+    cout << "Username: " << nn << endl;
+    cout << "Level: " << lev << endl;
+    cout << "Punkte: " << pts << endl;
+}
+
 int main() {
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
-    bool tabelle [2][4] ={
-        {false, false , false , false},
-        {false, false , false , false}
-    };
 
-    int Anzahl1sen= 0;
-    int beschreiben;
+    SD Spieler[5];
 
-
-    //Volles diagramm eingeben
-    /*
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 4; j++) {
-            //kv_diagramm[i][j] = 1;
-            cout << "Geben sie die werte für die Koordinate: (" << i+1 << " | " << j+1 << ") \n -->";
-            cin >> beschreiben;
-            if (beschreiben > 1 || beschreiben < 0) {
-                j--;
-                cout << "Bitte gib nur die werte 1 oder 0 an" << endl;
-            }
-            tabelle[i][j] = beschreiben;
-        }
+    // Eingabe
+    for (int i = 0; i < 5; i++) {
+        Spieler[i].setspielerdaten(i + 1);
     }
-    */
 
-    //2 Einzelne Eingabe
-
-    for (int i = 0; i < 2; i++) {
-        int a = 0;
-        int b = 0;
-        cout << "Bitte geben sie ein wert für die Y- Koordinate an";
-        cin >> a;
-        cout << "Bitte geben sie ein wert für die X- Koordinate an";
-        cin >> b;
-        tabelle[a-1][b-1] = true;
+    // Ausgabe
+    for (int i = 0; i < 5; i++) {
+        Spieler[i].getspielerdaten(i + 1);
     }
 
 
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 4; j++) {
-            cout << tabelle[i][j];
-        }
-        cout << endl;
-    }
 
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 4; j++) {
-            if (tabelle[i][j] ==true) {
-                cout << "Eine 1 an Koordinate (" << i+1  <<" | " << j+1 << ")" << endl;
-                Anzahl1sen++;
+    int n = 5;
+    // Wer hat die meisten Punkte -- Bubblesort
 
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (Spieler[j].lev < Spieler[j + 1].lev) {
+                SD temp = Spieler[j];
+                Spieler[j] = Spieler[j + 1];
+                Spieler[j + 1] = temp;
             }
         }
     }
-    cout << "Gesamte 1sen Anzahl: " << Anzahl1sen << endl;
 
-
-    //-----Manuelle volle ausgabe-----
-    /*
-    cout << "          A    |     !A     "<< endl;
-    cout << "    ___________|_____________"<< endl;
-    for (int i = 0; i < 2; i++) {
-        if (i==1) {
-            cout << "!B  |  ";
-        }else if (i==0) {
-            cout << " B  |  ";
-
-        }
-
-        for (int j = 0; j < 4; j++) {
-            cout << tabelle[i][j] << "  |  ";
-        }
-        cout << endl;
+    // Ausgabe: Ranking nach Level
+    cout << "\n--- Ranking Nach LVL---\n";
+    for (int i = 0; i < n; i++) {
+        cout << (i + 1) << ". " << Spieler[i].nn
+             << " | Level: " << Spieler[i].lev
+             << " | Punkte: " << Spieler[i].pts << endl;
     }
 
-    cout << "    ________|_______|__________"<< endl;
-    cout << "       C    |   !C  |    C    "<< endl;
-    */
 
-
-
+    return 0;
 }
