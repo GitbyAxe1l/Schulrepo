@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Schokokuchen + Kalorien-Zähler</title>
+  <style>
+    :root{
+      --bg:#0b0a09;
+      --card:#14110f;
+      --text:#f5efe8;
+      --muted:#b9a99a;
+      --accent:#d39b5a;
+      --accent2:#7a3f2a;
+      --ring:rgba(211,155,90,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(122,63,42,.35), transparent 55%),
+        radial-gradient(900px 600px at 90% 0%, rgba(211,155,90,.25), transparent 55%),
+        linear-gradient(180deg, #070605, var(--bg));
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .wrap{max-width:980px;margin:0 auto;padding:22px}
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 14px;border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;background:rgba(20,17,15,.65);
+      backdrop-filter: blur(10px);
+      position:sticky;top:14px;z-index:10;
+    }
+    .brand{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.2px}
+    .dot{width:12px;height:12px;border-radius:999px;background:linear-gradient(135deg,var(--accent),#ffd8a1);box-shadow:0 0 0 6px rgba(211,155,90,.12)}
+    .links{display:flex;gap:14px;align-items:center;font-size:.95rem;color:var(--muted)}
+    .links a{opacity:.95;text-decoration:none}
+    .links a:hover{color:var(--text)}
+    .hero{
+      margin-top:22px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(20,17,15,.92), rgba(20,17,15,.70));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:22px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.45);
+    }
+    h1{margin:0 0 10px;font-size:clamp(1.8rem,3.2vw,2.6rem);line-height:1.05}
+    .sub{color:var(--muted);line-height:1.45;margin:0 0 16px}
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+    .pill{
+      font-size:.85rem;color:#f7e7d6;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+    }
+    .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      border:0;cursor:pointer;text-decoration:none;
+      padding:11px 14px;border-radius:14px;
+      font-weight:700;
+      display:inline-flex;align-items:center;gap:10px;
+      transition: transform .08s ease, box-shadow .2s ease, background .2s ease;
+      outline:none;
+    }
+    .btn:focus{box-shadow:0 0 0 4px var(--ring)}
+    .btn.primary{
+      background:linear-gradient(135deg,var(--accent),#f2c38b);
+      color:#1b120c;
+      box-shadow:0 12px 30px rgba(211,155,90,.22);
+    }
+    .btn.primary:hover{transform:translateY(-1px)}
+    .btn.ghost{
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .btn.ghost:hover{background:rgba(255,255,255,.06)}
+    .art{
+      padding:0;
+      overflow:hidden;
+      position:relative;
+      min-height:280px;
+    }
+    .art .topfade{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(480px 260px at 30% 20%, rgba(211,155,90,.18), transparent 60%),
+        radial-gradient(500px 280px at 70% 35%, rgba(122,63,42,.26), transparent 62%),
+        linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.28));
+      pointer-events:none;
+    }
+    .cake{
+      position:absolute;left:50%;top:52%;
+      transform:translate(-50%,-50%);
+      width:min(320px,78%);
+      aspect-ratio: 1 / 1;
+      border-radius:28px;
+      background:linear-gradient(180deg,#3a1e14,#24110c);
+      box-shadow: 0 30px 80px rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .cake:before{
+      content:"";
+      position:absolute;left:10%;right:10%;top:10%;
+      height:28%;
+      border-radius:18px;
+      background:linear-gradient(180deg,#5a2b1b,#3a1e14);
+      filter: blur(.2px);
+    }
+    .drip{
+      position:absolute;left:8%;right:8%;top:26%;
+      height:18%;
+      border-radius:16px;
+      background:linear-gradient(180deg,#20100b,#160b07);
+      clip-path: polygon(0 0, 100% 0, 100% 55%, 92% 55%, 88% 95%, 82% 55%, 74% 55%, 70% 85%, 64% 55%, 55% 55%, 50% 95%, 45% 55%, 34% 55%, 30% 85%, 24% 55%, 16% 55%, 12% 95%, 8% 55%, 0 55%);
+      opacity:.95;
+    }
+    .spark{
+      position:absolute;inset:-30%;
+      background:
+        radial-gradient(circle at 22% 30%, rgba(211,155,90,.7), transparent 10%),
+        radial-gradient(circle at 68% 40%, rgba(255,255,255,.18), transparent 12%),
+        radial-gradient(circle at 45% 70%, rgba(211,155,90,.55), transparent 10%);
+      filter: blur(1px);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+    h2{margin:0 0 10px;font-size:1.1rem}
+    ul{margin:0;padding-left:18px;color:var(--muted);line-height:1.5}
+    .steps li{margin-bottom:6px}
+    .mini{
+      font-size:.92rem;color:var(--muted);margin-top:10px;
+      padding-top:12px;border-top:1px solid rgba(255,255,255,.08)
+    }
+
+    /* kcal tool */
+    .kcal-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px;
+    }
+    .kcal-table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0 10px;
+    }
+    .kcal-row td{
+      padding:10px 12px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .kcal-row td:first-child{border-radius:14px 0 0 14px}
+    .kcal-row td:last-child{border-radius:0 14px 14px 0; text-align:right}
+    .tag{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:.85rem;color:var(--muted);
+    }
+    input[type="number"]{
+      width:120px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.25);
+      color:var(--text);
+      outline:none;
+    }
+    input[type="number"]:focus{box-shadow:0 0 0 4px var(--ring)}
+    .kcal-box{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      padding:16px;
+    }
+    .big{
+      font-weight:900;
+      font-size:1.6rem;
+      letter-spacing:.2px;
+      margin:6px 0 2px;
+    }
+    .muted{color:var(--muted);line-height:1.45}
+    .warn{color:#f1cfaa}
+    .small{font-size:.9rem;color:rgba(245,239,232,.70)}
+    footer{
+      margin:18px 0 10px;
+      color:rgba(245,239,232,.55);
+      font-size:.9rem;
+      text-align:center;
+    }
+    @media (max-width: 860px){
+      .hero{grid-template-columns:1fr}
+      .art{min-height:240px}
+      .grid{grid-template-columns:1fr}
+      .links{display:none}
+      .kcal-grid{grid-template-columns:1fr}
+      input[type="number"]{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav">
+      <div class="brand"><span class="dot"></span> Schokokuchen</div>
+      <nav class="links">
+        <a href="#rezept">Rezept</a>
+        <a href="#kcal">Kalorien</a>
+        <a href="#schritte">Schritte</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="card">
+        <h1>Saftig, schokoladig, simpel.</h1>
+        <p class="sub">
+          Eine kleine One-Page für den perfekten <b>Schokokuchen</b>:
+          schnell vorbereitet, richtig fudgy und ideal für jeden Tag.
+        </p>
+
+        <div class="pillrow">
+          <span class="pill">⏱️ 15 min Vorbereitung</span>
+          <span class="pill">🔥 30–35 min Backen</span>
+          <span class="pill">🍫 Extra schokoladig</span>
+        </div>
+
+        <div class="cta">
+          <a class="btn primary" href="#rezept">🍰 Rezept ansehen</a>
+          <a class="btn ghost" href="#kcal">⚡ Kalorien checken</a>
+        </div>
+
+        <div class="mini">
+          Tipp: Für „fudgy“: nicht zu lange backen — Stäbchentest darf noch leicht feucht sein.
+        </div>
+      </div>
+
+      <div class="card art" aria-hidden="true">
+        <div class="cake">
+          <div class="spark"></div>
+          <div class="drip"></div>
+        </div>
+        <div class="topfade"></div>
+      </div>
+    </section>
+
+    <section id="rezept" class="card" style="margin-top:16px">
+      <h2>Rezept (1 Kuchenform, ca. 20–22 cm)</h2>
+      <div class="grid">
+        <div class="card" style="padding:16px;border-radius:18px">
+          <h2 id="zutaten">Zutaten</h2>
+          <ul>
+            <li>120 g Butter</li>
+            <li>120 g Zartbitterschokolade</li>
+            <li>120 g Zucker</li>
+            <li>2 Eier</li>
+            <li>100 g Mehl</li>
+            <li>25 g Kakao</li>
+            <li>1 TL Backpulver</li>
+            <li>1 Prise Salz</li>
+            <li>optional: Vanille, Schokodrops</li>
+          </ul>
+        </div>
+
+        <div class="card" style="padding:16px;border-radius:18px">
+          <h2 id="schritte">Schritte</h2>
+          <ul class="steps">
+            <li>Ofen auf 180°C (O/U) vorheizen, Form fetten.</li>
+            <li>Butter + Schokolade schmelzen, kurz abkühlen lassen.</li>
+            <li>Zucker + Eier verrühren, Schoko-Butter einrühren.</li>
+            <li>Mehl, Kakao, Backpulver, Salz mischen und unterheben.</li>
+            <li>In die Form, 30–35 min backen (nicht überbacken!).</li>
+          </ul>
+        </div>
+
+        <div class="card" style="padding:16px;border-radius:18px">
+          <h2>Finish</h2>
+          <ul>
+            <li>10 min abkühlen lassen, dann aus der Form.</li>
+            <li>Puderzucker, Ganache oder Beeren oben drauf.</li>
+            <li>Warm mit Eis: absoluter Cheatcode.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="kcal" class="card" style="margin-top:16px">
+      <h2>Kalorien-Zähler (schnell & grob)</h2>
+      <p class="sub" style="margin-bottom:0">
+        Stell ein, wie viele Stücke du schneidest. Die Werte sind <b>Schätzwerte</b> (je nach Marke/Größe).
+      </p>
+
+      <div class="kcal-grid">
+        <div>
+          <table class="kcal-table" aria-label="Kalorien je Zutat">
+            <tbody id="kcalBody"></tbody>
+          </table>
+          <div class="small">
+            Annahmen (pro 100g): Butter 717 kcal, Zartbitter 550, Zucker 400, Mehl 364, Kakao 228.
+            Eier ~78 kcal pro Stück, Backpulver ~5 kcal pro TL.
+          </div>
+        </div>
+
+        <div class="kcal-box">
+          <div class="tag">🍽️ Stücke</div>
+          <input id="pieces" type="number" min="1" value="10" />
+          <div style="height:10px"></div>
+
+          <div class="tag">⚡ Gesamt</div>
+          <div class="big"><span id="totalKcal">0</span> kcal</div>
+
+          <div class="tag">🔪 pro Stück</div>
+          <div class="big"><span id="perPieceKcal">0</span> kcal</div>
+
+          <p class="muted warn" style="margin:10px 0 0">
+            Hinweis: Das ist kein medizinischer Rat – nur eine schnelle Rechnung fürs Gefühl.
+          </p>
+
+          <div class="cta" style="margin-top:12px">
+            <button class="btn primary" id="recalc">Neu berechnen</button>
+            <button class="btn ghost" id="reset">Reset</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © Schokokuchen Mini-Page • HTML + CSS + Mini-JS
+    </footer>
+  </div>
+
+  <script>
+    // Grobe Standardwerte für DAS Rezept
+    // kcal/100g (oder pro Stück bei Eier) -> du kannst die Zahlen easy anpassen.
+    const ingredients = [
+      { key: "butter", label: "Butter", unit: "g", amount: 120, kcalPer100g: 717 },
+      { key: "choc", label: "Zartbitterschokolade", unit: "g", amount: 120, kcalPer100g: 550 },
+      { key: "sugar", label: "Zucker", unit: "g", amount: 120, kcalPer100g: 400 },
+      { key: "eggs", label: "Eier", unit: "Stk", amount: 2, kcalEach: 78 },
+      { key: "flour", label: "Mehl", unit: "g", amount: 100, kcalPer100g: 364 },
+      { key: "cocoa", label: "Kakao", unit: "g", amount: 25, kcalPer100g: 228 },
+      { key: "bp", label: "Backpulver", unit: "TL", amount: 1, kcalEach: 5 },
+      { key: "salt", label: "Salz", unit: "Prise", amount: 1, kcalEach: 0 }
+    ];
+
+    const kcalBody = document.getElementById("kcalBody");
+    const piecesEl = document.getElementById("pieces");
+    const totalKcalEl = document.getElementById("totalKcal");
+    const perPieceEl = document.getElementById("perPieceKcal");
+    const recalcBtn = document.getElementById("recalc");
+    const resetBtn = document.getElementById("reset");
+
+    function kcalFor(ing){
+      if (ing.kcalEach != null) return ing.amount * ing.kcalEach;
+      return (ing.amount / 100) * ing.kcalPer100g;
+    }
+
+    function format(n){
+      return Math.round(n);
+    }
+
+    function renderTable(){
+      kcalBody.innerHTML = "";
+      ingredients.forEach(ing => {
+        const tr = document.createElement("tr");
+        tr.className = "kcal-row";
+
+        const td1 = document.createElement("td");
+        td1.innerHTML = `<b>${ing.label}</b><div class="tag">${ing.unit}</div>`;
+
+        const td2 = document.createElement("td");
+        td2.style.textAlign = "right";
+        td2.innerHTML = `
+          <input
+            type="number"
+            min="0"
+            step="${ing.unit === 'Stk' || ing.unit === 'TL' || ing.unit === 'Prise' ? '1' : '5'}"
+            value="${ing.amount}"
+            data-key="${ing.key}"
+            aria-label="${ing.label} Menge"
+          />
+        `;
+
+        const td3 = document.createElement("td");
+        td3.style.textAlign = "right";
+        td3.innerHTML = `<b><span id="k_${ing.key}">${format(kcalFor(ing))}</span> kcal</b>`;
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        kcalBody.appendChild(tr);
+      });
+
+      // Inputs live verdrahten
+      kcalBody.querySelectorAll("input[type='number']").forEach(inp => {
+        inp.addEventListener("input", () => {
+          const key = inp.dataset.key;
+          const ing = ingredients.find(x => x.key === key);
+          ing.amount = Number(inp.value || 0);
+          update();
+        });
+      });
+    }
+
+    function update(){
+      // pro Zutat aktualisieren
+      let total = 0;
+      ingredients.forEach(ing => {
+        const k = kcalFor(ing);
+        total += k;
+        const el = document.getElementById("k_" + ing.key);
+        if (el) el.textContent = format(k);
+      });
+
+      const pieces = Math.max(1, Number(piecesEl.value || 1));
+      const perPiece = total / pieces;
+
+      totalKcalEl.textContent = format(total);
+      perPieceEl.textContent = format(perPiece);
+    }
+
+    recalcBtn.addEventListener("click", update);
+    resetBtn.addEventListener("click", () => {
+      // zurück auf Standardmengen
+      const defaults = {
+        butter:120, choc:120, sugar:120, eggs:2, flour:100, cocoa:25, bp:1, salt:1
+      };
+      ingredients.forEach(ing => ing.amount = defaults[ing.key]);
+      piecesEl.value = 10;
+
+      // inputs in der Tabelle wieder setzen
+      kcalBody.querySelectorAll("input[type='number']").forEach(inp => {
+        const key = inp.dataset.key;
+        inp.value = defaults[key];
+      });
+
+      update();
+    });
+
+    piecesEl.addEventListener("input", update);
+
+    renderTable();
+    update();
+  </script>
+</body>
+</html>
