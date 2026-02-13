@@ -6,7 +6,8 @@ struct WSR {
     // Funktion für manuelle eingabe fehlt
     float median[3];
     int n = 10;
-    float boxplot[10]={5,5,3,5,1,1,3,2,2,1};
+    float boxplot[10];
+    void werteboxplot(void);
     void bubblesort (void);
     void bubblesortausgabe(void);
     void medianberechnung (void);
@@ -14,7 +15,21 @@ struct WSR {
     void mittelwert(void);
     void trennungslinie(void);
 };
-
+void WSR::werteboxplot(void) {
+    cout << "welche größe soll das boxplot haben\n";
+    cin >> n;
+    if (n == 0) {
+        cout << "Größe 0 ist nicht erlaubt aber vorregistriert :3\nDas Boxplot ist mit 1,1,1,2,2,3,3,5,5 beschrieben";
+        n=9;
+        boxplot[0]=1; boxplot[1]=1; boxplot[2]=1; boxplot[3]=2; boxplot[4]=2; boxplot[5]=3; boxplot[6]=3; boxplot[7]=5; boxplot[8]=5;
+    }else{
+        cout << "Das Boxplot hat jetzt die Größe: " << n << endl;
+        for (int i = 0; i < n; i++) {
+            cout << "Geben sie nun ihre " << i+1 << " Zahl für das Boxplot an.";
+            cin >> boxplot[i];
+        }
+    }
+}
 void WSR::medianberechnung (void) {
 
     int median1stelle;
@@ -105,6 +120,7 @@ int main() {
     //SetConsoleOutputCP(1252);
 
     WSR Mwerte;
+    Mwerte.werteboxplot();
     Mwerte.bubblesort();
     Mwerte.bubblesortausgabe();
     Mwerte.medianberechnung();
