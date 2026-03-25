@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 class Program
 {
@@ -8,44 +9,89 @@ class Program
         string eingabe = Console.ReadLine();
 
         eingabe = eingabe.Replace(" ", "");
-        eingabe += "+"; // damit letzte Zahl verarbeitet wird
 
-        int ergebnis = 0;
+        List<double> zahlen = new List<double>();
+        List<char> operatoren = new List<char>();
+
         string zahlText = "";
-        char letzterOperator = '+';
 
-        bool neueZahl = true; // wichtig!
-
+        // -----------------------------
+        // 1. Zahlen und Operatoren trennen
+        // -----------------------------
         for (int i = 0; i < eingabe.Length; i++)
         {
             char zeichen = eingabe[i];
 
-            // ZAHL oder VORZEICHEN
-            if (char.IsDigit(zeichen) || (zeichen == '-' && neueZahl))
+            // Zahl oder Vorzeichen am Anfang einer Zahl
+            if (char.IsDigit(zeichen) || zeichen == ',' || zeichen == '.' ||
+               (zeichen == '-' && zahlText == "" && (i == 0 || IstOperator(eingabe[i - 1]))))
             {
                 zahlText += zeichen;
-                neueZahl = false;
             }
-            // OPERATOR
-            else if (zeichen == '+' || zeichen == '-' || zeichen == '*' || zeichen == '/')
+            else if (IstOperator(zeichen))
             {
-                int zahl = int.Parse(zahlText);
+                zahlen.Add(double.Parse(zahlText.Replace(',', '.'),
+                    System.Globalization.CultureInfo.InvariantCulture));
 
-                if (letzterOperator == '+')
-                    ergebnis = ergebnis + zahl;
-                else if (letzterOperator == '-')
-                    ergebnis = ergebnis - zahl;
-                else if (letzterOperator == '*')
-                    ergebnis = ergebnis * zahl;
-                else if (letzterOperator == '/')
-                    ergebnis = ergebnis / zahl;
-
-                letzterOperator = zeichen;
+                operatoren.Add(zeichen);
                 zahlText = "";
-                neueZahl = true; // neue Zahl beginnt!
             }
         }
 
-        Console.WriteLine("Ergebnis: " + ergebnis);
+        // letzte Zahl noch speichern
+        zahlen.Add(double.Parse(zahlText.Replace(',', '.'),
+            System.Globalization.CultureInfo.InvariantCulture));
+
+        // -----------------------------
+        // 2. Erst * und / berechnen
+        // -----------------------------
+        int index = 0;
+        while (index < operatoren.Count)
+        {
+            if (operatoren[index] == '*' || operatoren[index] == '/')
+            {
+                double links = zahlen[index];
+                double rechts = zahlen[index + 1];
+                double ergebnis = 0;
+
+                if (operatoren[index] == '*')
+                    ergebnis = links * rechts;
+                else
+                    ergebnis = links / rechts;
+
+                // linke Zahl ersetzen durch Ergebnis
+                zahlen[index] = ergebnis;
+
+                // rechte Zahl löschen
+                zahlen.RemoveAt(index + 1);
+
+                // Operator löschen
+                operatoren.RemoveAt(index);
+            }
+            else
+            {
+                index++;
+            }
+        }
+
+        // -----------------------------
+        // 3. Danach + und - berechnen
+        // -----------------------------
+        double endErgebnis = zahlen[0];
+
+        for (int i = 0; i < operatoren.Count; i++)
+        {
+            if (operatoren[i] == '+')
+                endErgebnis += zahlen[i + 1];
+            else if (operatoren[i] == '-')
+                endErgebnis -= zahlen[i + 1];
+        }
+
+        Console.WriteLine("Ergebnis: " + endErgebnis);
+    }
+
+    static bool IstOperator(char c)
+    {
+        return c == '+' || c == '-' || c == '*' || c == '/';
     }
 }
