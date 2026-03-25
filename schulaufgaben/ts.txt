@@ -1,0 +1,64 @@
+using System;
+using System.Globalization;
+
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Rechnung eingeben: ");
+        string eingabe = Console.ReadLine();
+
+        // Leerzeichen entfernen
+        eingabe = eingabe.Replace(" ", "");
+
+        // Deutsches Komma zu Punkt machen, falls du Dezimalzahlen willst
+        eingabe = eingabe.Replace(',', '.');
+
+        decimal ergebnis = 0;
+        string zahlText = "";
+        char letzterOperator = '+';
+
+        // Trick:
+        // Wir hängen am Ende noch ein + dran,
+        // damit die letzte Zahl auch noch verarbeitet wird
+        eingabe += "+";
+
+        for (int i = 0; i < eingabe.Length; i++)
+        {
+            char zeichen = eingabe[i];
+
+            // Wenn Zahl oder Punkt, dann zur aktuellen Zahl hinzufügen
+            if (char.IsDigit(zeichen) || zeichen == '.')
+            {
+                zahlText += zeichen;
+            }
+            // Wenn Operator gefunden
+            else if (zeichen == '+' || zeichen == '-' || zeichen == '*' || zeichen == '/')
+            {
+                decimal zahl = decimal.Parse(zahlText, CultureInfo.InvariantCulture);
+
+                if (letzterOperator == '+')
+                {
+                    ergebnis = ergebnis + zahl;
+                }
+                else if (letzterOperator == '-')
+                {
+                    ergebnis = ergebnis - zahl;
+                }
+                else if (letzterOperator == '*')
+                {
+                    ergebnis = ergebnis * zahl;
+                }
+                else if (letzterOperator == '/')
+                {
+                    ergebnis = ergebnis / zahl;
+                }
+
+                letzterOperator = zeichen;
+                zahlText = "";
+            }
+        }
+
+        Console.WriteLine("Ergebnis: " + ergebnis);
+    }
+}
