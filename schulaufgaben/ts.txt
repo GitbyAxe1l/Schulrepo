@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 
 class Program
 {
@@ -8,54 +7,42 @@ class Program
         Console.Write("Rechnung eingeben: ");
         string eingabe = Console.ReadLine();
 
-        // Leerzeichen entfernen
         eingabe = eingabe.Replace(" ", "");
+        eingabe += "+"; // damit letzte Zahl verarbeitet wird
 
-        // Deutsches Komma zu Punkt machen, falls du Dezimalzahlen willst
-        eingabe = eingabe.Replace(',', '.');
-
-        decimal ergebnis = 0;
+        int ergebnis = 0;
         string zahlText = "";
         char letzterOperator = '+';
 
-        // Trick:
-        // Wir hängen am Ende noch ein + dran,
-        // damit die letzte Zahl auch noch verarbeitet wird
-        eingabe += "+";
+        bool neueZahl = true; // wichtig!
 
         for (int i = 0; i < eingabe.Length; i++)
         {
             char zeichen = eingabe[i];
 
-            // Wenn Zahl oder Punkt, dann zur aktuellen Zahl hinzufügen
-            if (char.IsDigit(zeichen) || zeichen == '.')
+            // ZAHL oder VORZEICHEN
+            if (char.IsDigit(zeichen) || (zeichen == '-' && neueZahl))
             {
                 zahlText += zeichen;
+                neueZahl = false;
             }
-            // Wenn Operator gefunden
+            // OPERATOR
             else if (zeichen == '+' || zeichen == '-' || zeichen == '*' || zeichen == '/')
             {
-                decimal zahl = decimal.Parse(zahlText, CultureInfo.InvariantCulture);
+                int zahl = int.Parse(zahlText);
 
                 if (letzterOperator == '+')
-                {
                     ergebnis = ergebnis + zahl;
-                }
                 else if (letzterOperator == '-')
-                {
                     ergebnis = ergebnis - zahl;
-                }
                 else if (letzterOperator == '*')
-                {
                     ergebnis = ergebnis * zahl;
-                }
                 else if (letzterOperator == '/')
-                {
                     ergebnis = ergebnis / zahl;
-                }
 
                 letzterOperator = zeichen;
                 zahlText = "";
+                neueZahl = true; // neue Zahl beginnt!
             }
         }
 
